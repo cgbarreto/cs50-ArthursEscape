@@ -1,5 +1,6 @@
 Object = require "classic"
 push = require "push"
+lume = require "lume"
 
 defaultColor = {54/255, 56/255, 46/255, 255/255}
 
@@ -8,6 +9,7 @@ function love.load()
     require "background"
     require "player"
     require "enemy"
+    require "score"
     
     bgLayer = {
         love.graphics.newImage("graphics/background/plx-1.png"),
@@ -25,19 +27,33 @@ function love.load()
         table.insert(background, Background(bgLayer[i], 15 * (i), scaleFactorX, scaleFactorY))
     end
 
+    love.graphics.setNewFont(20)
+    score = Score()
+    
     player = Player()
     enemy = Enemy()
 
 end
 
 function love.update(dt)
-    for i,v in ipairs(background) do
-        v:update(dt)
-    end
-    player:update(dt,enemy)
-    enemy:update(dt)
 
-    
+    if player.hit == 1 then
+        score.endGame = true
+        score:bestUpdate()
+        if love.keyboard.isDown("space") then
+            score.endGame = false
+            --love.load()
+            love.event.quit("restart")
+        end
+    else
+        for i,v in ipairs(background) do
+            v:update(dt)
+        end
+        player:update(dt,enemy)
+        enemy:update(dt)
+        score:update(dt)
+    end
+
 end
 
 function love.draw()
@@ -50,4 +66,5 @@ function love.draw()
 
     player:draw()
     enemy:draw()
+    score:draw()
 end

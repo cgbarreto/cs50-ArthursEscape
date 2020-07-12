@@ -1,11 +1,11 @@
 Enemy = Object:extend()
 
-debug_enemy = true
+debug_enemy = false
 
 function Enemy:new(image)
     --self.image = image
 
-    self.image = love.graphics.newImage("graphics/enemies/hell-hound-run.png")
+    self.image = love.graphics.newImage("graphics/enemies/blur_hell-hound-run.png")
     self.imageWidth = self.image:getWidth()
     self.imageHeight = self.image:getHeight()
     self.scaleFactorX = 2.3

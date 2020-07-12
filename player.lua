@@ -2,7 +2,7 @@ Player = Object:extend()
 
 --default 25
 deltaConst = 25
-debug_player = true
+debug_player = false
 
 function Player:new()
     --self.image = love.graphics.newImage("graphics/adventurer/adventurer-idle-00.png")
