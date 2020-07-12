@@ -31,7 +31,6 @@ function love.update(dt)
     for i,v in ipairs(background) do
         v:update(dt)
     end
-
     player:update(dt)
 end
 

@@ -9,18 +9,16 @@ function Player:new()
     self.framesMatrixX = 8 
     self.framesMatrixY = 16
 
-    --self.width = self.imageWidth / self.framesMatrixX
-    --self.height = self.imageHeight / self.framesMatrixY
     self.width = 50
     self.height = 37
 
     self.frames_run = {}
 
-    self.scaleFactorX = 4
-    self.scaleFactorY = 4
+    self.scaleFactorX = 3.7
+    self.scaleFactorY = 3.7
 
     self.x = 0
-    self.y = love.graphics.getHeight() -  self.height * self.scaleFactorY - 65
+    self.y = love.graphics.getHeight() -  self.height * self.scaleFactorY - 15
 
     for i=2,self.framesMatrixX do
         --table.insert(self.frames_run, love.graphics.newQuad(i * self.width, 5 ,self.width,
@@ -38,14 +36,23 @@ function Player:update(dt)
     if currentFrame >= #self.frames_run - 1 then
         currentFrame = 1
     end
+
+    if love.keyboard.isDown("left") then
+        self.x = self.x - 200 * dt
+    elseif love.keyboard.isDown("right") then
+        self.x = self.x + 200 * dt
+    end
+
+    local windowWidth = love.graphics.getWidth()
+
+    if self.x < 0 then
+        self.x = 0
+    elseif self.x > windowWidth - 3 * self.width then
+        self.x = windowWidth - 3 * self.width
+    end
+
 end
 
 function Player:draw()
-    --love.graphics.draw(self.image, self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
-    love.graphics.print(self.width, 50, 50)
-    love.graphics.print(self.height, 100, 50)
-    love.graphics.print(#self.frames_run, 150, 50)
     love.graphics.draw(self.image, self.frames_run[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
-
 end
-
