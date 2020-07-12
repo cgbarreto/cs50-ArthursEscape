@@ -58,30 +58,30 @@ function Player:new()
     table.insert(self.frames_slide, love.graphics.newQuad(0, 4 * self.height, self.width,
                     self.height, self.imageWidth, self.imageHeight))    
 
-    currentFrame = 1
-    currentJumpFrame = 1
-    currentSlideFrame = 1
+    self.currentFrame = 1
+    self.currentJumpFrame = 1
+    self.currentSlideFrame = 1
 
 end
 
 function Player:update(dt)
     
     if self.y ~= self.yInicial then
-        if currentJumpFrame >= #self.frames_jump then
-            currentJumpFrame = #self.frames_jump
+        if self.currentJumpFrame >= #self.frames_jump then
+            self.currentJumpFrame = #self.frames_jump
         else
-            currentJumpFrame = currentJumpFrame + dt * 0.4 * deltaConst
+            self.currentJumpFrame = self.currentJumpFrame + dt * 0.4 * deltaConst
         end
     elseif self.slideFlag  == 1 then
-        currentSlideFrame = currentSlideFrame + dt * 0.5 * deltaConst
-        if currentSlideFrame >= #self.frames_slide then
-            currentSlideFrame = 1
+        self.currentSlideFrame = self.currentSlideFrame + dt * 0.5 * deltaConst
+        if self.currentSlideFrame >= #self.frames_slide then
+            self.currentSlideFrame = 1
             self.slideFlag  = 0
         end
     else
-        currentFrame = currentFrame + 10 * dt
-        if currentFrame >= #self.frames_run - 1 then
-            currentFrame = 1
+        self.currentFrame = self.currentFrame + 10 * dt
+        if self.currentFrame >= #self.frames_run - 1 then
+            self.currentFrame = 1
         end
     end
 
@@ -121,20 +121,20 @@ end
 
 function Player:draw()
     if self.y ~= self.yInicial then
-        love.graphics.draw(self.image, self.frames_jump[math.floor(currentJumpFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+        love.graphics.draw(self.image, self.frames_jump[math.floor(self.currentJumpFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
         --love.graphics.print("I wanna jump", 100, 100)
 
     elseif self.slideFlag == 1 then
         --love.graphics.print("Wanna slide", 100, 300)
-        love.graphics.draw(self.image, self.frames_slide[math.floor(currentSlideFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+        love.graphics.draw(self.image, self.frames_slide[math.floor(self.currentSlideFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
     else
-        love.graphics.draw(self.image, self.frames_run[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+        love.graphics.draw(self.image, self.frames_run[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
         
     end
     
     if debug_player then
         love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 100, 150)
-        love.graphics.print("currentSlideFrame: " .. currentSlideFrame, 100, 250)
+        love.graphics.print("currentSlideFrame: " .. self.currentSlideFrame, 100, 250)
         love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
 
         ------ Study hit box

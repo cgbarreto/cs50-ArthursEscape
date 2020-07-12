@@ -27,7 +27,7 @@ function love.load()
 
     player = Player()
 
-    enemy_img1 = love.graphics.newImage("graphics/enemies/hell-hound-run.png")
+
     enemy = Enemy(enemy_img1)
 
 end
@@ -37,7 +37,9 @@ function love.update(dt)
         v:update(dt)
     end
     player:update(dt)
-    enemy:update(dt)
+
+    enemy:update(dt, true)
+    
 end
 
 function love.draw()
@@ -49,5 +51,5 @@ function love.draw()
     end
 
     player:draw()
-    --enemy:draw()
+    enemy:draw()
 end
