@@ -21,8 +21,6 @@ function Player:new()
     self.y = love.graphics.getHeight() -  self.height * self.scaleFactorY - 15
 
     for i=2,self.framesMatrixX do
-        --table.insert(self.frames_run, love.graphics.newQuad(i * self.width, 5 ,self.width,
-                    --self.height, self.width * 8, self.height * 17))
         table.insert(self.frames_run, love.graphics.newQuad(self.width * i, self.height ,self.width,
                     self.height, self.imageWidth, self.imageHeight))                    
     end

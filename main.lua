@@ -4,13 +4,14 @@ push = require "push"
 function love.load()
     require "background"
     require "player"
+    require "enemy"
     
     bgLayer = {
-        love.graphics.newImage('graphics/background/plx-1.png'),
-        love.graphics.newImage('graphics/background/plx-2.png'),
-        love.graphics.newImage('graphics/background/plx-3.png'),
-        love.graphics.newImage('graphics/background/plx-4.png'),
-        love.graphics.newImage('graphics/background/plx-5.png')
+        love.graphics.newImage("graphics/background/plx-1.png"),
+        love.graphics.newImage("graphics/background/plx-2.png"),
+        love.graphics.newImage("graphics/background/plx-3.png"),
+        love.graphics.newImage("graphics/background/plx-4.png"),
+        love.graphics.newImage("graphics/background/plx-5.png")
     }
 
     local scaleFactorX = 2.1
@@ -24,6 +25,9 @@ function love.load()
 
     player = Player()
 
+    enemy_img1 = love.graphics.newImage("graphics/enemies/hell-hound-run.png")
+    enemy = Enemy(enemy_img1)
+
 end
 
 function love.update(dt)
@@ -31,7 +35,8 @@ function love.update(dt)
     for i,v in ipairs(background) do
         v:update(dt)
     end
-    player:update(dt)
+    --player:update(dt)
+    enemy:update(dt)
 end
 
 function love.draw()
@@ -43,5 +48,6 @@ function love.draw()
         v:draw()
     end
 
-    player:draw()
+    --player:draw()
+    enemy:draw()
 end
