@@ -1,6 +1,8 @@
 Player = Object:extend()
 
+--default 25
 deltaConst = 25
+
 
 function Player:new()
     --self.image = love.graphics.newImage("graphics/adventurer/adventurer-idle-00.png")
@@ -32,7 +34,7 @@ function Player:new()
 
     for i=1,5 do
         table.insert(self.frames_jump, love.graphics.newQuad(self.width * (i-1), 2 * self.height ,self.width,
-    self.height, self.imageWidth, self.imageHeight))    
+                        self.height, self.imageWidth, self.imageHeight))    
     end
     for i=1,1 do
         table.insert(self.frames_jump, love.graphics.newQuad(self.width * i, 3 * self.height ,self.width,
@@ -44,8 +46,21 @@ function Player:new()
     self.jumpSpeed = 0
     self.gravity = 5
 
+    self.frames_slide = {}
+    self.slideFlag = 0
+
+    table.insert(self.frames_slide, love.graphics.newQuad(0, self.height, self.width,
+                    self.height, self.imageWidth, self.imageHeight))    
+    for i=3,6 do
+        table.insert(self.frames_slide, love.graphics.newQuad(self.width * i, 3 * self.height, self.width,
+                        self.height, self.imageWidth, self.imageHeight))    
+    end
+    table.insert(self.frames_slide, love.graphics.newQuad(0, 4 * self.height, self.width,
+                    self.height, self.imageWidth, self.imageHeight))    
+
     currentFrame = 1
     currentJumpFrame = 1
+    currentSlideFrame = 1
 
 end
 
@@ -56,6 +71,12 @@ function Player:update(dt)
             currentJumpFrame = #self.frames_jump
         else
             currentJumpFrame = currentJumpFrame + dt * 0.4 * deltaConst
+        end
+    elseif self.slideFlag  == 1 then
+        currentSlideFrame = currentSlideFrame + dt * 0.5 * deltaConst
+        if currentSlideFrame >= #self.frames_slide then
+            currentSlideFrame = 1
+            self.slideFlag  = 0
         end
     else
         currentFrame = currentFrame + 10 * dt
@@ -90,22 +111,32 @@ function Player:update(dt)
     if self.y < self.yInicial then
         self:applyGravity(dt)
     end
+
+    -- Slide action
+    if love.keyboard.isDown("down") and self.slideFlag ~= 1 then
+        self.slideFlag  = 1
+    end
+
 end
 
 function Player:draw()
     if self.y ~= self.yInicial then
         love.graphics.draw(self.image, self.frames_jump[math.floor(currentJumpFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
         --love.graphics.print("I wanna jump", 100, 100)
+
+    elseif self.slideFlag == 1 then
+        love.graphics.print("Wanna slide", 100, 300)
+        love.graphics.draw(self.image, self.frames_slide[math.floor(currentSlideFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
     else
         love.graphics.draw(self.image, self.frames_run[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
         
     end
     
     love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 100, 150)
-    love.graphics.print("currentJumpFrame: " .. currentJumpFrame, 100, 250)
+    love.graphics.print("currentSlideFrame: " .. currentSlideFrame, 100, 250)
     love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
 
-    -- Study hit box
+    ------ Study hit box
     r,g,b,a = love.graphics.getColor()
     love.graphics.setColor(1,0,0)
     love.graphics.rectangle("line",self.x, self.y, self.width * self.scaleFactorX, self.height * self.scaleFactorY)
@@ -114,6 +145,14 @@ function Player:draw()
     love.graphics.setColor(0,1,0)
     love.graphics.rectangle("line",self.x + 70, self.y + 30, self.width * self.scaleFactorX - 110, self.height * self.scaleFactorY - 30)
     love.graphics.setColor(r,g,b,a)
+
+    --Slide hitbox
+    if self.slideFlag == 1 then
+        love.graphics.setColor(0,0,1)
+        love.graphics.rectangle("line",self.x + 50, self.y + 65, self.width * self.scaleFactorX - 90, self.height * self.scaleFactorY - 65)
+        love.graphics.setColor(r,g,b,a)
+    end
+
     ---
 end
 
