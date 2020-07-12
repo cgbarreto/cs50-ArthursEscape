@@ -1,5 +1,7 @@
 Player = Object:extend()
 
+deltaConst = 25
+
 function Player:new()
     --self.image = love.graphics.newImage("graphics/adventurer/adventurer-idle-00.png")
     self.image = love.graphics.newImage("graphics/Adventurer/adventurer-v1.5-Sheet.png")
@@ -32,9 +34,9 @@ function Player:new()
         table.insert(self.frames_jump, love.graphics.newQuad(self.width * (i-1), 2 * self.height ,self.width,
     self.height, self.imageWidth, self.imageHeight))    
     end
-    for i=1,2 do
+    for i=1,1 do
         table.insert(self.frames_jump, love.graphics.newQuad(self.width * i, 3 * self.height ,self.width,
-    self.height, self.imageWidth, self.imageHeight))    
+                    self.height, self.imageWidth, self.imageHeight))    
     end
 
     self.jumpFlag = 0
@@ -48,9 +50,18 @@ function Player:new()
 end
 
 function Player:update(dt)
-    currentFrame = currentFrame + 10 * dt
-    if currentFrame >= #self.frames_run - 1 then
-        currentFrame = 1
+    
+    if self.y ~= self.yInicial then
+        if currentJumpFrame >= #self.frames_jump then
+            currentJumpFrame = #self.frames_jump
+        else
+            currentJumpFrame = currentJumpFrame + dt * 0.4 * deltaConst
+        end
+    else
+        currentFrame = currentFrame + 10 * dt
+        if currentFrame >= #self.frames_run - 1 then
+            currentFrame = 1
+        end
     end
 
     if love.keyboard.isDown("left") then
@@ -82,21 +93,38 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    love.graphics.draw(self.image, self.frames_run[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
-    love.graphics.print("self.y: " .. self.y .. "  self.yInicial: " .. self.yInicial, 100, 150)
-    love.graphics.print("self.jumpSpeed: " .. self.jumpSpeed, 100, 200)
-    if self.jumpSpeed < 0 then
-        love.graphics.print("I wanna jump", 100, 100)
+    if self.y ~= self.yInicial then
+        love.graphics.draw(self.image, self.frames_jump[math.floor(currentJumpFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+        --love.graphics.print("I wanna jump", 100, 100)
+    else
+        love.graphics.draw(self.image, self.frames_run[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+        
     end
+    
+    love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 100, 150)
+    love.graphics.print("currentJumpFrame: " .. currentJumpFrame, 100, 250)
+    love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
+
+    -- Study hit box
+    r,g,b,a = love.graphics.getColor()
+    love.graphics.setColor(1,0,0)
+    love.graphics.rectangle("line",self.x, self.y, self.width * self.scaleFactorX, self.height * self.scaleFactorY)
+    --love.graphics.setColor(r,g,b,a)
+    
+    love.graphics.setColor(0,1,0)
+    love.graphics.rectangle("line",self.x + 70, self.y + 30, self.width * self.scaleFactorX - 110, self.height * self.scaleFactorY - 30)
+    love.graphics.setColor(r,g,b,a)
+    ---
 end
 
 function Player:applyGravity(dt)
-    self.y = self.y + self.jumpSpeed * dt * 35
-    self.jumpSpeed = self.jumpSpeed + self.gravity * dt * 35
+    self.y = self.y + self.jumpSpeed * dt * deltaConst
+    self.jumpSpeed = self.jumpSpeed + self.gravity * dt * deltaConst
  
     if self.y >= self.yInicial then
         self.y = self.yInicial
         self.jumpSpeed = 0
         self.jumpFlag = 0
+        currentJumpFrame = 1
     end
 end

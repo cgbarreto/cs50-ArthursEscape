@@ -1,7 +1,10 @@
 Object = require "classic"
 push = require "push"
 
+defaultColor = {54/255, 56/255, 46/255, 255/255}
+
 function love.load()
+
     require "background"
     require "player"
     require "enemy"
@@ -39,7 +42,7 @@ end
 
 function love.draw()
     --love.graphics.clear(169/255, 146/255, 125/255, 255/255)
-    love.graphics.clear(54/255, 56/255, 46/255, 255/255)
+    love.graphics.clear(defaultColor)
 
     for i,v in ipairs(background) do
         v:draw()
