@@ -2,7 +2,7 @@ Player = Object:extend()
 
 --default 25
 deltaConst = 25
-
+debug_player = false
 
 function Player:new()
     --self.image = love.graphics.newImage("graphics/adventurer/adventurer-idle-00.png")
@@ -125,35 +125,36 @@ function Player:draw()
         --love.graphics.print("I wanna jump", 100, 100)
 
     elseif self.slideFlag == 1 then
-        love.graphics.print("Wanna slide", 100, 300)
+        --love.graphics.print("Wanna slide", 100, 300)
         love.graphics.draw(self.image, self.frames_slide[math.floor(currentSlideFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
     else
         love.graphics.draw(self.image, self.frames_run[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
         
     end
     
-    love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 100, 150)
-    love.graphics.print("currentSlideFrame: " .. currentSlideFrame, 100, 250)
-    love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
+    if debug_player then
+        love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 100, 150)
+        love.graphics.print("currentSlideFrame: " .. currentSlideFrame, 100, 250)
+        love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
 
-    ------ Study hit box
-    r,g,b,a = love.graphics.getColor()
-    love.graphics.setColor(1,0,0)
-    love.graphics.rectangle("line",self.x, self.y, self.width * self.scaleFactorX, self.height * self.scaleFactorY)
-    --love.graphics.setColor(r,g,b,a)
-    
-    love.graphics.setColor(0,1,0)
-    love.graphics.rectangle("line",self.x + 70, self.y + 30, self.width * self.scaleFactorX - 110, self.height * self.scaleFactorY - 30)
-    love.graphics.setColor(r,g,b,a)
-
-    --Slide hitbox
-    if self.slideFlag == 1 then
-        love.graphics.setColor(0,0,1)
-        love.graphics.rectangle("line",self.x + 50, self.y + 65, self.width * self.scaleFactorX - 90, self.height * self.scaleFactorY - 65)
+        ------ Study hit box
+        r,g,b,a = love.graphics.getColor()
+        love.graphics.setColor(1,0,0)
+        love.graphics.rectangle("line",self.x, self.y, self.width * self.scaleFactorX, self.height * self.scaleFactorY)
+        --love.graphics.setColor(r,g,b,a)
+        
+        love.graphics.setColor(0,1,0)
+        love.graphics.rectangle("line",self.x + 70, self.y + 30, self.width * self.scaleFactorX - 110, self.height * self.scaleFactorY - 30)
         love.graphics.setColor(r,g,b,a)
+
+        --Slide hitbox
+        if self.slideFlag == 1 then
+            love.graphics.setColor(0,0,1)
+            love.graphics.rectangle("line",self.x + 50, self.y + 65, self.width * self.scaleFactorX - 90, self.height * self.scaleFactorY - 65)
+            love.graphics.setColor(r,g,b,a)
+        end
     end
 
-    ---
 end
 
 function Player:applyGravity(dt)

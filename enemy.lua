@@ -23,14 +23,14 @@ function Enemy:new(image)
 end
 
 function Enemy:update(dt)
-    currentFrame = currentFrame + 10 * dt
-    if currentFrame >= #self.frames then
-        currentFrame = 1
-    end
+    --currentFrame = currentFrame + 10 * dt
+    --if currentFrame >= #self.frames then
+    --    currentFrame = 1
+    --end
 end
 
 function Enemy:draw()
-    love.graphics.print(#self.frames, 50, 50)
+    
     --love.graphics.draw(self.image, self.frames[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
     love.graphics.draw(self.image, self.frames[math.floor(currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
 end

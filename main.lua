@@ -37,7 +37,7 @@ function love.update(dt)
         v:update(dt)
     end
     player:update(dt)
-    --enemy:update(dt)
+    enemy:update(dt)
 end
 
 function love.draw()
