@@ -6,33 +6,47 @@ push = require "push"
 
 
 function love.load()
-    bgLayer1 = love.graphics.newImage('graphics/background/plx-1.png')
-    bgLayer2 = love.graphics.newImage('graphics/background/plx-2.png')
-    bgLayer3 = love.graphics.newImage('graphics/background/plx-3.png')
-    bgLayer4 = love.graphics.newImage('graphics/background/plx-4.png')
-    bgLayer5 = love.graphics.newImage('graphics/background/plx-5.png')
-
-    scaleFactorX = 2.1
-    scaleFactorY = 3
-
+    require "background"
     require "player"
+    
+    bgLayer = {
+        love.graphics.newImage('graphics/background/plx-1.png'),
+        love.graphics.newImage('graphics/background/plx-2.png'),
+        love.graphics.newImage('graphics/background/plx-3.png'),
+        love.graphics.newImage('graphics/background/plx-4.png'),
+        love.graphics.newImage('graphics/background/plx-5.png')
+    }
+
+    local scaleFactorX = 2.1
+    local scaleFactorY = 3
+
+    background = {}
+    --background = Background(bgLayer1, 10, scaleFactorX, scaleFactorY)
+    for i=1,#bgLayer do
+        table.insert(background, Background(bgLayer[i], 15 * (i), scaleFactorX, scaleFactorY))
+    end
+
     player = Player()
 
 end
 
 function love.update(dt)
+    --background:update(dt)
+    for i,v in ipairs(background) do
+        v:update(dt)
+    end
 
+    player:update(dt)
 end
 
 function love.draw()
-    love.graphics.clear(108/255, 140/255, 255/255, 255/255)
-    love.graphics.draw(bgLayer1,0, 0, 0, scaleFactorX, scaleFactorY)
-    love.graphics.draw(bgLayer2,0, 0, 0, scaleFactorX, scaleFactorY)
-    love.graphics.draw(bgLayer3,0, 0, 0, scaleFactorX, scaleFactorY)
-    love.graphics.draw(bgLayer4,0, 0, 0, scaleFactorX, scaleFactorY)
-    love.graphics.draw(bgLayer5,0, 0, 0, scaleFactorX, scaleFactorY)
-    love.graphics.print(love.graphics.getWidth() .. " " .. " " .. love.graphics.getHeight())
-    love.graphics.print(bgLayer1:getWidth() .. " " .. " " .. bgLayer1:getHeight(),0,50)
+    --love.graphics.clear(169/255, 146/255, 125/255, 255/255)
+    love.graphics.clear(54/255, 56/255, 46/255, 255/255)
 
-    player:draw()
+    --background:draw()
+    for i,v in ipairs(background) do
+        v:draw()
+    end
+
+    --player:draw()
 end
