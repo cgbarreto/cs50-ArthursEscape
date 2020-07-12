@@ -10,7 +10,15 @@ function Score:new()
     r,g,b,a = love.graphics.getColor()
 
     -- Add a save and load
-    self.bestScore = 0
+    if love.filesystem.getInfo("arthurRunBestScore.txt") then
+        --self.bestScore = love.filesystem.read("arthurRunBestScore.txt")
+        --self.bestScore = 0
+        self.file = love.filesystem.read("arthurRunBestScore.txt")
+        self.bestScore = lume.deserialize(self.file)
+    else
+        self.bestScore = 0
+    end
+
     self.actualScore = 0
 
     self.newBestFlag = false
@@ -46,6 +54,8 @@ function Score:bestUpdate()
         self.bestScore = self.actualScore
         self.newBestFlag = true
         -- Save to file
+        serialized = lume.serialize(self.bestScore)
         
+        love.filesystem.write("arthurRunBestScore.txt", serialized)
     end
 end

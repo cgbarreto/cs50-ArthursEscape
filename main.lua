@@ -42,8 +42,7 @@ function love.update(dt)
         score:bestUpdate()
         if love.keyboard.isDown("space") then
             score.endGame = false
-            --love.load()
-            love.event.quit("restart")
+            love.load()
         end
     else
         for i,v in ipairs(background) do
