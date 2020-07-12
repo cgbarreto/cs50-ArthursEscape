@@ -18,7 +18,6 @@ function love.load()
     local scaleFactorY = 3
 
     background = {}
-    --background = Background(bgLayer1, 10, scaleFactorX, scaleFactorY)
     for i=1,#bgLayer do
         table.insert(background, Background(bgLayer[i], 15 * (i), scaleFactorX, scaleFactorY))
     end
@@ -31,23 +30,21 @@ function love.load()
 end
 
 function love.update(dt)
-    --background:update(dt)
     for i,v in ipairs(background) do
         v:update(dt)
     end
-    --player:update(dt)
-    enemy:update(dt)
+    player:update(dt)
+    --enemy:update(dt)
 end
 
 function love.draw()
     --love.graphics.clear(169/255, 146/255, 125/255, 255/255)
     love.graphics.clear(54/255, 56/255, 46/255, 255/255)
 
-    --background:draw()
     for i,v in ipairs(background) do
         v:draw()
     end
 
-    --player:draw()
-    enemy:draw()
+    player:draw()
+    --enemy:draw()
 end
