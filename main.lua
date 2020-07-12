@@ -26,9 +26,7 @@ function love.load()
     end
 
     player = Player()
-
-
-    enemy = Enemy(enemy_img1)
+    enemy = Enemy()
 
 end
 
@@ -36,9 +34,9 @@ function love.update(dt)
     for i,v in ipairs(background) do
         v:update(dt)
     end
-    player:update(dt)
+    player:update(dt,enemy)
+    enemy:update(dt)
 
-    enemy:update(dt, true)
     
 end
 

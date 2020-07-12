@@ -1,6 +1,6 @@
 Enemy = Object:extend()
 
-debug_enemy = false
+debug_enemy = true
 
 function Enemy:new(image)
     --self.image = image
@@ -29,6 +29,12 @@ function Enemy:new(image)
     end
 
     self.currentFrame = 1
+
+    self.hitbox = {}
+    self.hitbox.x = self.x + self.width/2
+    self.hitbox.y = self.y + self.height/2.7
+    self.hitbox.width = self.width * self.scaleFactorX - self.width/1.5
+    self.hitbox.height = self.height * self.scaleFactorY - self.height/2.5
 end
 
 function Enemy:update(dt)
@@ -41,6 +47,13 @@ function Enemy:update(dt)
     if self.x < -2 * self.width then
         self.x = self.xInicial
     end
+
+    -- Hitbox update
+    self.hitbox.x = self.x + self.width/2
+    self.hitbox.y = self.y + self.height/2.7
+    self.hitbox.width = self.width * self.scaleFactorX - self.width/1.5
+    self.hitbox.height = self.height * self.scaleFactorY - self.height/2.5
+
 end
 
 function Enemy:draw()
@@ -49,8 +62,8 @@ function Enemy:draw()
     love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
 
     if debug_enemy then 
-        love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 100, 150)
-        love.graphics.print("self.currentFrame: " .. self.currentFrame, 100, 250)
+        love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 400, 150)
+        love.graphics.print("self.currentFrame: " .. self.currentFrame, 400, 250)
         --love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
 
         ------ Study hit box
@@ -60,8 +73,10 @@ function Enemy:draw()
         --love.graphics.setColor(r,g,b,a)
         
         love.graphics.setColor(0,1,0)
-        love.graphics.rectangle("line", self.x + self.width/2, self.y + self.height/2.7, 
-                                self.width * self.scaleFactorX - self.width/1.5, self.height * self.scaleFactorY - self.height/2.5)
+        --love.graphics.rectangle("line", self.x + self.width/2, self.y + self.height/2.7, 
+                                --self.width * self.scaleFactorX - self.width/1.5, self.height * self.scaleFactorY - self.height/2.5)
+        love.graphics.rectangle("line", self.hitbox.x, self.hitbox.y, 
+                                self.hitbox.width, self.hitbox.height)
         love.graphics.setColor(r,g,b,a)
 
         --Slide hitbox

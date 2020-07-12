@@ -2,7 +2,7 @@ Player = Object:extend()
 
 --default 25
 deltaConst = 25
-debug_player = false
+debug_player = true
 
 function Player:new()
     --self.image = love.graphics.newImage("graphics/adventurer/adventurer-idle-00.png")
@@ -62,9 +62,17 @@ function Player:new()
     self.currentJumpFrame = 1
     self.currentSlideFrame = 1
 
+    self.hit = 0
+    
+    self.hitbox = {}
+    self.hitbox.x = self.x + 70
+    self.hitbox.y = self.y + 30
+    self.hitbox.width = self.width * self.scaleFactorX - 110
+    self.hitbox.height = self.height * self.scaleFactorY - 30
+
 end
 
-function Player:update(dt)
+function Player:update(dt,obj)
     
     if self.y ~= self.yInicial then
         if self.currentJumpFrame >= #self.frames_jump then
@@ -117,6 +125,28 @@ function Player:update(dt)
         self.slideFlag  = 1
     end
 
+    -- Hitbox update
+    if self.slideFlag == 1 then
+        self.hitbox = {}
+        self.hitbox.x = self.x + 50
+        self.hitbox.y = self.y + 65
+        self.hitbox.width = self.width * self.scaleFactorX - 90
+        self.hitbox.height = self.height * self.scaleFactorY - 65
+    else
+        self.hitbox = {}
+        self.hitbox.x = self.x + 70
+        self.hitbox.y = self.y + 30
+        self.hitbox.width = self.width * self.scaleFactorX - 110
+        self.hitbox.height = self.height * self.scaleFactorY - 30
+    end
+
+
+    if self:checkCollision(obj) then
+        self.hit = 1
+    else
+        self.hit = 0
+    end
+
 end
 
 function Player:draw()
@@ -133,6 +163,14 @@ function Player:draw()
     end
     
     if debug_player then
+        if self.hit == 1 then
+            love.graphics.print("HIT", 100, 50)
+            self.mode = "fill"
+        else
+            self.mode = "line"
+        end
+        
+        love.graphics.print("self.hit " .. self.hit, 100 , 100)
         love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 100, 150)
         love.graphics.print("currentSlideFrame: " .. self.currentSlideFrame, 100, 250)
         love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
@@ -144,7 +182,8 @@ function Player:draw()
         --love.graphics.setColor(r,g,b,a)
         
         love.graphics.setColor(0,1,0)
-        love.graphics.rectangle("line",self.x + 70, self.y + 30, self.width * self.scaleFactorX - 110, self.height * self.scaleFactorY - 30)
+        --love.graphics.rectangle(self.mode,self.x + 70, self.y + 30, self.width * self.scaleFactorX - 110, self.height * self.scaleFactorY - 30)
+        love.graphics.rectangle(self.mode, self.hitbox.x, self.hitbox.y, self.hitbox.width, self.hitbox.height)
         love.graphics.setColor(r,g,b,a)
 
         --Slide hitbox
@@ -167,4 +206,27 @@ function Player:applyGravity(dt)
         self.jumpFlag = 0
         currentJumpFrame = 1
     end
+end
+
+function Player:checkCollision(obj)
+    local a_left = self.hitbox.x
+    local a_right = self.hitbox.x + self.hitbox.width
+    local a_top = self.hitbox.y
+    local a_bottom = self.hitbox.y + self.hitbox.height
+
+    local obj_left = obj.hitbox.x
+    local obj_right = obj.hitbox.x + obj.hitbox.width
+    local obj_top = obj.hitbox.y
+    local obj_bottom = obj.hitbox.y + obj.hitbox.height
+
+    if a_right > obj_left and
+        a_left < obj_right and
+        a_bottom > obj_top and
+        a_top < obj_bottom then
+
+        return true
+    else
+        return false
+    end
+
 end
