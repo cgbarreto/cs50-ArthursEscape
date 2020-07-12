@@ -1,9 +1,5 @@
-
 Object = require "classic"
-
 push = require "push"
-
-
 
 function love.load()
     require "background"
@@ -48,5 +44,5 @@ function love.draw()
         v:draw()
     end
 
-    --player:draw()
+    player:draw()
 end
