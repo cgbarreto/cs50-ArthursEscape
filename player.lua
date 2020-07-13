@@ -108,7 +108,6 @@ function Player:update(dt,obj)
         self.x = windowWidth - 3 * self.width
     end
     
-
     -- Jump action
     if love.keyboard.isDown("up") and self.jumpFlag == 0 then
         self.jumpSpeed = self.jumpHigh
@@ -141,6 +140,7 @@ function Player:update(dt,obj)
     end
 
 
+    --if self:checkCollision(obj) and not (debug_player or debug_enemy) then
     if self:checkCollision(obj) then
         self.hit = 1
     else

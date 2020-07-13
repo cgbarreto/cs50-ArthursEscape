@@ -28,10 +28,23 @@ function Enemy:new(image)
     end
 
     self.framesJump = {}
+
+    self.scaleFactorXJump = 3
+    self.scaleFactorYJump = 3
+
+    self.widthJump = 56
+    self.heightJump = 32
+
     self.jumpFlag = false
-    for i=1,5 do
-        table.insert(self.framesJump, love.graphics.newQuad((i-1) * self.width, 0 ,self.width,
-        self.height, self.imageWidth, self.imageHeight))                        
+    self.jumpBlock = 0.9
+
+    self.jumpHigh = -self.width
+    self.jumpSpeed = 0
+    self.gravity = 7
+
+    for i=1,6 do
+        table.insert(self.framesJump, love.graphics.newQuad((i-1) * self.widthJump, 0 ,self.widthJump,
+        self.heightJump, self.imageWidth, self.imageHeight))                        
     end
 
     self.currentFrame = 1
@@ -46,21 +59,40 @@ end
 
 function Enemy:update(dt)
     
-    if not self.jumpFlag then
-        self.currentFrame = self.currentFrame + 10 * dt
-        if self.currentFrame >= #self.frames then
-            self.currentFrame = 1
-        end
-    else
-        self.currentJumpFrame = self.currentJumpFrame + 10 * dt
+    if self.jumpFlag then
+        self.currentJumpFrame = self.currentJumpFrame + 6 * dt
         if self.currentJumpFrame >= #self.framesJump then
             self.currentJumpFrame = 1
             self.jumpFlag = false
             self.currentFrame = 1
         end
-
+    else
+        self.currentFrame = self.currentFrame + 10 * dt
+        if self.currentFrame >= #self.frames then
+            self.currentFrame = 1
+        end
     end
 
+    -- Jump flag control
+    if not self.jumpFlag and self.jumpBlock == 0 then
+        self:jump()
+        self.jumpSpeed = self.jumpHigh
+        self.jumpBlock = 1
+        self:applyGravity(dt)
+    end
+
+    if self.jumpBlock ~= 0 then
+        self.jumpBlock = self.jumpBlock - dt * 0.5
+        if self.jumpBlock <= 0 then
+            self.jumpBlock = 0
+        end
+    end
+
+    if self.y < self.yInicial then
+        self:applyGravity(dt)
+    end
+
+    -- X movement
     self.x = self.x - self.runSpeed * dt
     if self.x < -2 * self.width then
         self.x = self.xInicial
@@ -72,27 +104,22 @@ function Enemy:update(dt)
     self.hitbox.width = self.width * self.scaleFactorX - self.width/1.5
     self.hitbox.height = self.height * self.scaleFactorY - self.height/2.5
 
-    if love.math.random(0,1) > 0.95 and not self.jumpFlag then
-        self.jumpFlag = true
-    end
-
-
 end
 
 function Enemy:draw()
     
-    if not self.jumpFlag then
-        love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+    if self.jumpFlag then
+        love.graphics.draw(self.imageJump, self.framesJump[math.floor(self.currentJumpFrame)],self.x, self.y, 0, self.scaleFactorXJump, self.scaleFactorYJump)
     else
-        love.graphics.draw(self.image, self.framesJump[math.floor(self.currentJumpFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+        love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
     end
-
 
     if debug_enemy then
         love.graphics.setNewFont(15) 
         love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 400, 150)
-        love.graphics.print("self.currentFrame: " .. self.currentFrame, 400, 250)
-        --love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
+        love.graphics.print("Run Frame: " .. math.floor(self.currentFrame) .. 
+                            "  Jump Frame:" .. math.floor(self.currentJumpFrame), 400, 250)
+        love.graphics.print("self.jumpBlock: " .. self.jumpBlock, 400, 300)
 
         ------ Study hit box
         r,g,b,a = love.graphics.getColor()
@@ -107,12 +134,21 @@ function Enemy:draw()
                                 self.hitbox.width, self.hitbox.height)
         love.graphics.setColor(r,g,b,a)
 
-        --Slide hitbox
-        --if self.slideFlag == 1 then
-        --    love.graphics.setColor(0,0,1)
-        --    love.graphics.rectangle("line",self.x + 50, self.y + 65, self.width * self.scaleFactorX - 90, self.height * self.scaleFactorY - 65)
-        --   love.graphics.setColor(r,g,b,a)
-        --end
     end
 end
 
+function Enemy:jump()
+    self.jumpFlag = true
+end
+
+function Enemy:applyGravity(dt)
+    self.y = self.y + self.jumpSpeed * dt * deltaConst
+    self.jumpSpeed = self.jumpSpeed + self.gravity * dt * deltaConst
+ 
+    if self.y >= self.yInicial then
+        self.y = self.yInicial
+        self.jumpSpeed = 0
+        self.jumpFlag = 0
+        currentJumpFrame = 1
+    end
+end

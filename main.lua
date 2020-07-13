@@ -2,7 +2,7 @@ Object = require "classic"
 push = require "push"
 lume = require "lume"
 
-debug_player = false 
+debug_player = false
 debug_enemy = false
 
 flagLoadScreen = true
@@ -26,8 +26,7 @@ function love.load()
     require "score"
 
     love.graphics.setNewFont(20)
-    score = Score()
-    
+    score = Score()   
     player = Player()
     enemy = Enemy()
 
@@ -58,9 +57,10 @@ function love.update(dt)
             for i,v in ipairs(background) do
                 v:update(dt)
             end
+            score:update(dt)
             player:update(dt,enemy)
             enemy:update(dt)
-            score:update(dt)
+
         end
     end
 
@@ -73,7 +73,6 @@ function love.draw()
     for i,v in ipairs(background) do
         v:draw()
     end
-
 
     if not flagLoadScreen then
         player:draw()
