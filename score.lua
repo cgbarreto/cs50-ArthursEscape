@@ -30,6 +30,7 @@ function Score:update(dt)
 end
 
 function Score:draw()
+    love.graphics.setNewFont(20)
     love.graphics.print("Best Score: " .. math.floor(self.bestScore), self.xPosition, self.yPosition)
     love.graphics.print("Actual Score: " .. math.floor(self.actualScore), self.xPosition, self.yPosition + 30)
 
@@ -48,7 +49,6 @@ function Score:draw()
     end
 end
 
-
 function Score:bestUpdate()
     if self.actualScore > self.bestScore then
         self.bestScore = self.actualScore
@@ -58,4 +58,13 @@ function Score:bestUpdate()
         
         love.filesystem.write("arthurRunBestScore.txt", serialized)
     end
+end
+
+function Score:resetScore()
+    if love.filesystem.getInfo("arthurRunBestScore.txt") then
+        love.filesystem.remove("arthurRunBestScore.txt")
+    else
+        -- No score to delete
+    end
+    self.bestScore = 0
 end

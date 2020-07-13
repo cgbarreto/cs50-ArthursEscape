@@ -2,30 +2,28 @@ Object = require "classic"
 push = require "push"
 lume = require "lume"
 
+debug_player = false 
+debug_enemy = false
+
+flagLoadScreen = true
+
 defaultColor = {54/255, 56/255, 46/255, 255/255}
 
 function love.load()
 
+    require "preload"
     require "background"
-    require "player"
-    require "enemy"
-    require "score"
-    
-    bgLayer = {
-        love.graphics.newImage("graphics/background/plx-1.png"),
-        love.graphics.newImage("graphics/background/plx-2.png"),
-        love.graphics.newImage("graphics/background/plx-3.png"),
-        love.graphics.newImage("graphics/background/plx-4.png"),
-        love.graphics.newImage("graphics/background/plx-5.png")
-    }
-
-    local scaleFactorX = 2.1
-    local scaleFactorY = 3
+    require "loadscreen"
 
     background = {}
     for i=1,#bgLayer do
-        table.insert(background, Background(bgLayer[i], 15 * (i), scaleFactorX, scaleFactorY))
+        table.insert(background, Background(bgLayer[i], 15 * (i), bgLayer.scaleFactorX, bgLayer.scaleFactorY))
     end
+    loadScreen = LoadScreen()
+
+    require "player"
+    require "enemy"
+    require "score"
 
     love.graphics.setNewFont(20)
     score = Score()
@@ -37,20 +35,33 @@ end
 
 function love.update(dt)
 
-    if player.hit == 1 then
-        score.endGame = true
-        score:bestUpdate()
-        if love.keyboard.isDown("space") then
-            score.endGame = false
-            love.load()
+    if flagLoadScreen then
+        loadScreen:update(dt)
+        if love.keyboard.isDown("return") then
+            if loadScreen.buttomSelected == "NewGame" then
+                flagLoadScreen = false
+            elseif loadScreen.buttomSelected == "ResetScore" then
+                score:resetScore()
+            elseif loadScreen.buttomSelected == "Quit" then
+                love.event.quit()
+            end
         end
     else
-        for i,v in ipairs(background) do
-            v:update(dt)
+        if player.hit == 1 then
+            score.endGame = true
+            score:bestUpdate()
+            if love.keyboard.isDown("space") then
+                score.endGame = false
+                love.load()
+            end
+        else
+            for i,v in ipairs(background) do
+                v:update(dt)
+            end
+            player:update(dt,enemy)
+            enemy:update(dt)
+            score:update(dt)
         end
-        player:update(dt,enemy)
-        enemy:update(dt)
-        score:update(dt)
     end
 
 end
@@ -63,7 +74,12 @@ function love.draw()
         v:draw()
     end
 
-    player:draw()
-    enemy:draw()
-    score:draw()
+
+    if not flagLoadScreen then
+        player:draw()
+        enemy:draw()
+        score:draw()
+    else
+        loadScreen:draw()
+    end
 end

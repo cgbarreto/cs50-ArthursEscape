@@ -2,7 +2,6 @@ Player = Object:extend()
 
 --default 25
 deltaConst = 25
-debug_player = false
 
 function Player:new()
     --self.image = love.graphics.newImage("graphics/adventurer/adventurer-idle-00.png")
@@ -25,11 +24,14 @@ function Player:new()
     self.y = love.graphics.getHeight() -  self.height * self.scaleFactorY - 15
     self.yInicial = self.y
 
+    -- Run setup
     for i=2,self.framesMatrixX do
         table.insert(self.frames_run, love.graphics.newQuad(self.width * i, self.height ,self.width,
                     self.height, self.imageWidth, self.imageHeight))                    
     end
 
+
+    -- Jump setup
     self.frames_jump = {}
 
     for i=1,5 do
@@ -73,7 +75,6 @@ function Player:new()
 end
 
 function Player:update(dt,obj)
-    
     if self.y ~= self.yInicial then
         if self.currentJumpFrame >= #self.frames_jump then
             self.currentJumpFrame = #self.frames_jump
@@ -112,7 +113,6 @@ function Player:update(dt,obj)
     if love.keyboard.isDown("up") and self.jumpFlag == 0 then
         self.jumpSpeed = self.jumpHigh
         self.jumpFlag = 1
-        love.graphics.print("I wanna jump", 100, 100)
         self:applyGravity(dt)
     end
 
@@ -163,6 +163,7 @@ function Player:draw()
     end
     
     if debug_player then
+        love.graphics.setNewFont(15)
         if self.hit == 1 then
             love.graphics.print("HIT", 100, 50)
             self.mode = "fill"
@@ -229,4 +230,15 @@ function Player:checkCollision(obj)
         return false
     end
 
+end
+
+function Player:loadScreen()
+    love.graphics.draw(self.image, self.framesIdle[math.floor(self.currentIdleFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+end
+
+function Player:updateloadScreen(dt)
+    self.currentIdleFrame = self.currentIdleFrame + 0.28 * dt * deltaConst
+    if self.currentIdleFrame >= #self.framesIdle then
+        self.currentIdleFrame = 1
+    end
 end

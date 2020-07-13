@@ -1,7 +1,5 @@
 Enemy = Object:extend()
 
-debug_enemy = false
-
 function Enemy:new(image)
     --self.image = image
 
@@ -61,7 +59,8 @@ function Enemy:draw()
     --love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
     love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
 
-    if debug_enemy then 
+    if debug_enemy then
+        love.graphics.setNewFont(15) 
         love.graphics.print("self.y: " .. math.floor(self.y) .. "  self.yInicial: " .. self.yInicial, 400, 150)
         love.graphics.print("self.currentFrame: " .. self.currentFrame, 400, 250)
         --love.graphics.print("self.jumpSpeed: " .. math.floor(self.jumpSpeed), 100, 200)
