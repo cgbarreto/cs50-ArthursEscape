@@ -14,6 +14,10 @@ function love.load()
     require "preload"
     require "background"
     require "loadscreen"
+    
+    soundHit = false
+    song:setLooping(true)
+    song:play()
 
     background = {}
     for i=1,#bgLayer do
@@ -50,6 +54,10 @@ function love.update(dt)
     else
         -- Player was hit -> game over
         if player.hit == 1 then
+            if not soundHit then
+                hithurt:play()
+                soundHit = true
+            end
             score.endGame = true
             score:bestUpdate()
             if love.keyboard.isDown("space") then

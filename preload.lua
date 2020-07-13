@@ -8,3 +8,6 @@ bgLayer = {
     scaleFactorY = 3
 }
 
+song = love.audio.newSource("sound/song.mp3", "stream")
+
+hithurt = love.audio.newSource("sound/Hit_Hurt.wav", "static")
