@@ -10,6 +10,10 @@ function LoadScreen:new()
     self.imageWidth = self.image:getWidth()
     self.imageHeight = self.image:getHeight()
 
+    --self.imagePriest = love.graphics.newImage("graphics/priest1.png") -- 24x26
+    self.imagePriest = love.graphics.newImage("graphics/priest2.png") -- 25x29
+
+
     self.width = 50
     self.height = 37
 
@@ -148,13 +152,15 @@ function LoadScreen:historyDraw()
 
     local textPositionY = 105
 
+
+    
     love.graphics.setNewFont(fontSize)
     love.graphics.setColor(72/255, 88/255, 96/255)
     --love.graphics.rectangle("fill", rectOriginX, rectOriginY, 95 + self.windowWidth/2, 400)
     love.graphics.rectangle("fill", rectOriginX, rectOriginY, 95 + self.windowWidth/2, fontSize * 2.5 * #self.text + fontSize)
-
-    love.graphics.setColor(22/255, 38/255, 46/255)
     
+    love.graphics.setColor(22/255, 38/255, 46/255)
+
     for i = 1,#self.text do
         if i == 1 then
             love.graphics.print("Priest: " .. self.text[1], self.windowWidth/5 + fontSize, textPositionY + fontSize * 2 * i)
@@ -164,7 +170,11 @@ function LoadScreen:historyDraw()
     end
     love.graphics.setColor(235/255, 235/255, 46/255)
     love.graphics.print("Press SPACE to continue", self.windowWidth/2.5, fontSize * 3.3 * #self.text + fontSize)
+    love.graphics.setColor(r,g,b,a)
+    love.graphics.draw(self.imagePriest, rectOriginX - 45, rectOriginY - 20, 0, 2.5, 2.5)
     love.graphics.setColor(22/255, 38/255, 46/255)
+
+
     --love.graphics.print(self.text[1], self.windowWidth/5 + fontSize, 250)
     --love.graphics.print(self.text[2], 31 + self.windowWidth/4, 300)
 end
