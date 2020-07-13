@@ -18,7 +18,7 @@ function Enemy:new(image)
     self.y = love.graphics.getHeight() - self.imageHeight * self.scaleFactorY - 15
     self.yInicial = self.y
 
-    self.runSpeed = 300
+    self.runSpeed = 350
 
     self.frames = {}
 
@@ -99,10 +99,10 @@ function Enemy:update(dt)
     end
 
     -- Hitbox update
-    self.hitbox.x = self.x + self.width/2
-    self.hitbox.y = self.y + self.height/2.7
-    self.hitbox.width = self.width * self.scaleFactorX - self.width/1.5
-    self.hitbox.height = self.height * self.scaleFactorY - self.height/2.5
+    self.hitbox.x = self.x + self.width/2 + 10
+    self.hitbox.y = self.y + self.height/2.7 + 15
+    self.hitbox.width = self.width * self.scaleFactorX - self.width/1.5 - 45
+    self.hitbox.height = self.height * self.scaleFactorY - self.height/2.5 - 25
 
 end
 

@@ -67,10 +67,10 @@ function Player:new()
     self.hit = 0
     
     self.hitbox = {}
-    self.hitbox.x = self.x + 70
-    self.hitbox.y = self.y + 30
-    self.hitbox.width = self.width * self.scaleFactorX - 110
-    self.hitbox.height = self.height * self.scaleFactorY - 30
+    self.hitbox.x = self.x + 85
+    self.hitbox.y = self.y + 40
+    self.hitbox.width = self.width * self.scaleFactorX - 140
+    self.hitbox.height = self.height * self.scaleFactorY - 55
 
 end
 
@@ -128,15 +128,15 @@ function Player:update(dt,obj)
     if self.slideFlag == 1 then
         self.hitbox = {}
         self.hitbox.x = self.x + 50
-        self.hitbox.y = self.y + 65
+        self.hitbox.y = self.y + 80
         self.hitbox.width = self.width * self.scaleFactorX - 90
-        self.hitbox.height = self.height * self.scaleFactorY - 65
+        self.hitbox.height = self.height * self.scaleFactorY - 85
     else
         self.hitbox = {}
-        self.hitbox.x = self.x + 70
-        self.hitbox.y = self.y + 30
-        self.hitbox.width = self.width * self.scaleFactorX - 110
-        self.hitbox.height = self.height * self.scaleFactorY - 30
+        self.hitbox.x = self.x + 85
+        self.hitbox.y = self.y + 40
+        self.hitbox.width = self.width * self.scaleFactorX - 140
+        self.hitbox.height = self.height * self.scaleFactorY - 55
     end
 
 
@@ -166,7 +166,8 @@ function Player:draw()
         love.graphics.setNewFont(15)
         if self.hit == 1 then
             love.graphics.print("HIT", 100, 50)
-            self.mode = "fill"
+            --self.mode = "fill"
+            self.mode = "line"
         else
             self.mode = "line"
         end

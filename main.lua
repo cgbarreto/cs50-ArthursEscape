@@ -38,14 +38,17 @@ function love.update(dt)
         loadScreen:update(dt)
         if love.keyboard.isDown("return") then
             if loadScreen.buttomSelected == "NewGame" then
-                flagLoadScreen = false
+                loadScreen:confirmHistory()
+                --flagLoadScreen = false
             elseif loadScreen.buttomSelected == "ResetScore" then
                 score:resetScore()
+                loadScreen:confirmReset()
             elseif loadScreen.buttomSelected == "Quit" then
                 love.event.quit()
             end
         end
     else
+        -- Player was hit -> game over
         if player.hit == 1 then
             score.endGame = true
             score:bestUpdate()
@@ -54,6 +57,7 @@ function love.update(dt)
                 love.load()
             end
         else
+        -- Game starts
             for i,v in ipairs(background) do
                 v:update(dt)
             end
@@ -63,6 +67,12 @@ function love.update(dt)
 
         end
     end
+
+    if flagLoadScreen and loadScreen.showHist and love.keyboard.isDown("space") then
+        love.graphics.setColor(r,g,b,a)
+        flagLoadScreen = false
+    end
+
 
 end
 
