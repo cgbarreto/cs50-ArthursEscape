@@ -4,6 +4,7 @@ function Enemy:new(image)
     --self.image = image
 
     self.image = love.graphics.newImage("graphics/enemies/blur_hell-hound-run.png")
+    self.imageJump = love.graphics.newImage("graphics/enemies/blur_hell-hound-jump.png")
     self.imageWidth = self.image:getWidth()
     self.imageHeight = self.image:getHeight()
     self.scaleFactorX = 2.3
@@ -26,7 +27,15 @@ function Enemy:new(image)
         self.height, self.imageWidth, self.imageHeight))                        
     end
 
+    self.framesJump = {}
+    self.jumpFlag = false
+    for i=1,5 do
+        table.insert(self.framesJump, love.graphics.newQuad((i-1) * self.width, 0 ,self.width,
+        self.height, self.imageWidth, self.imageHeight))                        
+    end
+
     self.currentFrame = 1
+    self.currentJumpFrame  = 1
 
     self.hitbox = {}
     self.hitbox.x = self.x + self.width/2
@@ -36,9 +45,20 @@ function Enemy:new(image)
 end
 
 function Enemy:update(dt)
-    self.currentFrame = self.currentFrame + 10 * dt
-    if self.currentFrame >= #self.frames then
-        self.currentFrame = 1
+    
+    if not self.jumpFlag then
+        self.currentFrame = self.currentFrame + 10 * dt
+        if self.currentFrame >= #self.frames then
+            self.currentFrame = 1
+        end
+    else
+        self.currentJumpFrame = self.currentJumpFrame + 10 * dt
+        if self.currentJumpFrame >= #self.framesJump then
+            self.currentJumpFrame = 1
+            self.jumpFlag = false
+            self.currentFrame = 1
+        end
+
     end
 
     self.x = self.x - self.runSpeed * dt
@@ -52,12 +72,21 @@ function Enemy:update(dt)
     self.hitbox.width = self.width * self.scaleFactorX - self.width/1.5
     self.hitbox.height = self.height * self.scaleFactorY - self.height/2.5
 
+    if love.math.random(0,1) > 0.95 and not self.jumpFlag then
+        self.jumpFlag = true
+    end
+
+
 end
 
 function Enemy:draw()
     
-    --love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
-    love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+    if not self.jumpFlag then
+        love.graphics.draw(self.image, self.frames[math.floor(self.currentFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+    else
+        love.graphics.draw(self.image, self.framesJump[math.floor(self.currentJumpFrame)],self.x, self.y, 0, self.scaleFactorX, self.scaleFactorY)
+    end
+
 
     if debug_enemy then
         love.graphics.setNewFont(15) 
