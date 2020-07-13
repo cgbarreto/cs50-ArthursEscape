@@ -11,8 +11,6 @@ function Score:new()
 
     -- Add a save and load
     if love.filesystem.getInfo("arthurRunBestScore.txt") then
-        --self.bestScore = love.filesystem.read("arthurRunBestScore.txt")
-        --self.bestScore = 0
         self.file = love.filesystem.read("arthurRunBestScore.txt")
         self.bestScore = lume.deserialize(self.file)
     else

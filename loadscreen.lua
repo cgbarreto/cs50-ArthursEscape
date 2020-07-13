@@ -6,7 +6,7 @@ function LoadScreen:new()
     self.windowWidth = love.graphics.getWidth()
 
     self.frontscreen = love.graphics.newImage("graphics/frontscreen.png")
-    self.image = love.graphics.newImage("graphics/Adventurer/adventurer-v1.5-Sheet.png")
+    self.image = love.graphics.newImage("graphics/adventurer/adventurer-v1.5-Sheet.png")
     self.imageWidth = self.image:getWidth()
     self.imageHeight = self.image:getHeight()
 

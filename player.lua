@@ -5,7 +5,7 @@ deltaConst = 25
 
 function Player:new()
     --self.image = love.graphics.newImage("graphics/adventurer/adventurer-idle-00.png")
-    self.image = love.graphics.newImage("graphics/Adventurer/adventurer-v1.5-Sheet.png")
+    self.image = love.graphics.newImage("graphics/adventurer/adventurer-v1.5-Sheet.png")
     self.imageWidth = self.image:getWidth()
     self.imageHeight = self.image:getHeight()
     
