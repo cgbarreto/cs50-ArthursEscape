@@ -1,6 +1,6 @@
 # **Arthur's Escape**
 
-Arthur's Escape is a endless run game, as the final project for the online CS50 class, 
+Arthur's Escape is a endless run game, developed as the final project for the online CS50 class, 
 for more information check the website bellow:
 
 https://cs50.harvard.edu/x/2020/
