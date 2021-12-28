@@ -13,9 +13,9 @@ The game accepts arrow keys, return and space bar inputs
 
 The main character, is capable of running (left and right keys), jumping (up key) and sliding (down key)
 
-For this version there's only one enemy, a zombie dog that runs and pseudo-randomly jumps attacking
+For this version there's only one enemy, a zombie dog that runs and pseudo-randomly jump attack
 
-It's capable of tracking and store the player best score and also it's possible to reset the best score to 0
+It's capable of tracking/store the player best score and also it's possible to reset the best score to 0
 
 # Improve possibilities
 
@@ -29,7 +29,7 @@ Add a enemies table and related behavior config
 
 Setup a unified pre-load file
 
-# Concerning the tech tools, graphic and audio assets
+# Concerning the tech tools, graphics and audio assets
 
 ## Tech tools
 
@@ -43,7 +43,7 @@ How to LÖVE tutorial: https://sheepolution.com/learn/book/contents
 
 ## Graphical assets
 
-All the free use assets were obtained through https://itch.io
+All the assets were obtained through https://itch.io
 
     - Forrest Background: https://jesse-m.itch.io/jungle-pack
 
